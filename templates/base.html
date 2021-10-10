@@ -10,6 +10,11 @@
 <body>
     <head>
         {% include 'navbar.html' %}
+        {% for message in get_flashed_messages() %}
+            <div>
+               <h4> {{ message }} </h4> 
+            </div>
+        {% endfor %}
     </head>
     {% block content %}{% endblock %}
 </body>
