@@ -38,14 +38,20 @@ def hello():
     user_ip = session.get('user_ip')
     login_form = LoginForm()
     username = session.get('username')
+    is_admin = session.get('is_admin')
     print(username)
     context = {'user_ip':user_ip,
     'todos' : todos,
     'login_form': login_form,
     'username': username,
+    'is_admin': is_admin,
     }
     if login_form.validate_on_submit():            
         username = login_form.username.data
+        
+        if username == 'admin':
+            session['is_admin'] = True
+
         session['username'] = username       
         flash('Nombre de usario registrado con éxito!') 
         return redirect(url_for('index'))
