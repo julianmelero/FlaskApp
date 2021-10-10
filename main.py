@@ -1,7 +1,6 @@
-from flask import Flask, request, make_response, redirect, render_template, session
+from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField
-from wtforms.fields.simple import SubmitField
+from wtforms.fields import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 
 app = Flask(__name__)
@@ -34,15 +33,24 @@ def index():
 
 
 
-@app.route('/hello')
-def hello():
+@app.route('/hello', methods=['GET', 'POST'])
+def hello():    
     #user_ip= request.cookies.get('user_ip')
     user_ip = session.get('user_ip')
     login_form = LoginForm()
+    username = session.get('username')
+    print(username)
     context = {'user_ip':user_ip,
     'todos' : todos,
     'login_form': login_form,
+    'username': username,
     }
+    if login_form.validate_on_submit():            
+        username = login_form.username.data
+        session['username'] = username       
+        flash('Nombre de usario registrado con éxito!') 
+        return redirect(url_for('index'))
+
     return render_template('hello.html', **context)
 
 
