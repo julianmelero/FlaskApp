@@ -1,12 +1,10 @@
-from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
-from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from flask import  request, make_response, redirect, render_template, session, url_for, flash
 import unittest
 
-app = Flask(__name__)
+from app.forms import LoginForm
+from app import create_app
 
-app.config['SECRET_KEY'] = "SUPER SECRETO"
+app = create_app()
 
 @app.errorhandler(404)
 def not_found(error):
@@ -15,11 +13,6 @@ def not_found(error):
 
 
 todos = ['Comprar Café', 'Enviar solicitud', 'Entregar Producto']
-
-class LoginForm(FlaskForm):
-    username = StringField('Name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Enviar')
 
 
 @app.cli.command()
