@@ -1,5 +1,8 @@
 from flask import Flask, request, make_response, redirect, render_template, session
-
+from flask_wtf import FlaskForm
+from wtforms.fields import StringField, PasswordField
+from wtforms.fields.simple import SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 
@@ -12,6 +15,12 @@ def not_found(error):
 
 
 todos = ['Comprar Café', 'Enviar solicitud', 'Entregar Producto']
+
+class LoginForm(FlaskForm):
+    username = StringField('Name', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Enviar')
+
 
 
 @app.route('/')
@@ -29,8 +38,10 @@ def index():
 def hello():
     #user_ip= request.cookies.get('user_ip')
     user_ip = session.get('user_ip')
+    login_form = LoginForm()
     context = {'user_ip':user_ip,
-    'todos' : todos
+    'todos' : todos,
+    'login_form': login_form,
     }
     return render_template('hello.html', **context)
 
